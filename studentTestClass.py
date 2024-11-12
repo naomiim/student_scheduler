@@ -57,7 +57,7 @@ class TestStudent(unittest.TestCase):
         self.assertEqual(self.student.gpa, 3.8)
         print("test_gpa_method: Success")
 
-    def test_str_method(self):
+    def test_student_str_method(self):
         # Test the string representation of the student object
         self.student.addCourse(self.course1)
         self.student.addCourse(self.course2)
@@ -70,7 +70,7 @@ class TestStudent(unittest.TestCase):
         self.assertEqual(str(self.student), expected_output)
         print("test_student_str_method: Success")
 
-    def test_str_method(self):
+    def test_course_str_method(self):
         # Test the string representation of the Course object
         expected_output = (
             "Math 101 - Introduction to Mathmatics\n"
