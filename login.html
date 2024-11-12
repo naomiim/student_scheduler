@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Basic styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .logo {
+            width: 150px; /* Adjust the width as needed */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .form-container .create-account-btn {
+            background-color: #28a745;
+        }
+        .form-container .create-account-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Centered Image at the Top -->
+    <img src="\Users\kevin\Downloads\img.png" alt="Logo" class="logo">
+
+    <div class="form-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button onclick="login()">Login</button>
+        <button class="create-account-btn" onclick="goToSignup()">Create Account</button>
+    </div>
+
+    <script>
+        function login() {
+            const enteredUsername = document.getElementById('username').value;
+            const enteredPassword = document.getElementById('password').value;
+
+            // Get the stored student data from localStorage
+            const student = JSON.parse(localStorage.getItem('student'));
+
+            if (student && enteredUsername === student.username && enteredPassword === student.password) {
+                window.location.href = 'student_info.html'; // Redirect to student info page
+            } else {
+                alert('Invalid login credentials!');
+            }
+        }
+
+        function goToSignup() {
+            window.location.href = 'signup.html';  // Redirect to signup page
+        }
+    </script>
+
+</body>
+</html>

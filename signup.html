@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        /* Basic styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .logo {
+            width: 150px; /* Adjust the width as needed */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .form-container .back-to-login-btn {
+            background-color: #17a2b8;
+        }
+        .form-container .back-to-login-btn:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Centered Image at the Top -->
+    <img src="\Users\kevin\Downloads\img.png" alt="Logo" class="logo">
+
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <form action="/signup/" method="post"></form>
+            <input type="text" id="full-name" placeholder="Full Name" required><br>
+            <input type="email" id="email" placeholder="Email" required><br>
+            <input type="text" id="username" placeholder="Username" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button onclick="signUp()">Create Account</button>
+        </form>
+        <button class="back-to-login-btn" onclick="goBackToLogin()">Back to Login</button>
+    </div>
+
+    <script>
+        function signUp() {
+            const fullName = document.getElementById('full-name').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Validate input
+            if (!fullName || !email || !username || !password) {
+                alert('All fields are required!');
+                return;
+            }
+
+            // Create a new student object
+            const student = {
+                fullName: fullName,
+                email: email,
+                username: username,
+                password: password,
+                studentID: `S${Math.floor(Math.random() * 90000) + 10000}`,  // Random ID
+                courseList: [],
+                numberOfCredits: 0,
+                gpa: 0.0
+            };
+
+            // Save to localStorage
+            localStorage.setItem('student', JSON.stringify(student));
+
+            // Redirect back to login page
+            window.location.href = 'login.html';  // Redirect to login page after account is created
+        }
+
+        function goBackToLogin() {
+            window.location.href = 'login.html';  // Redirect back to login page
+        }
+    </script>
+
+</body>
+</html>
