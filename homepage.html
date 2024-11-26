@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        header {
+            background-color: red;
+            color: gold;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: grey;
+            padding: 10px 0;
+        }
+        nav button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        nav button:hover {
+            background-color: red;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .announcements {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border-color: grey;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .announcements h2 {
+            color: gold;
+            background-color: grey;
+        }
+        .announcement-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-left: 5px solid red;
+            border-radius: 3px;
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>UMGC Student Center</h1>
+    </header>
+    <nav>
+        <button onclick="logout()">Logout</button>
+        <button onclick="window.location.href='registration.html'">Registration</button>
+        <button onclick="window.location.href='class-schedule.html'">Class Schedule</button>
+    </nav>
+    <div class="container">
+        <section class="announcements">
+            <h2>Announcements</h2>
+            <div class="announcement-item">
+                <strong>Update:</strong> Class schedules have been updated for the next semester.
+            </div>
+            <div class="announcement-item">
+                <strong>Reminder:</strong> Registration closes on December 10th, 2024.
+            </div>
+            <div class="announcement-item">
+                <strong>Event:</strong> Join us for the annual school festival on December 15th, 2024.
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function logout() {
+            // Replace with your logout logic
+            alert('You have been logged out!');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
