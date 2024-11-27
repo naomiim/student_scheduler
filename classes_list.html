@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Classes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 24px;
+        }
+        .classes-container {
+            background-color: white;
+            width: 80%;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .class {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .class:last-child {
+            border-bottom: none;
+        }
+        .class h4 {
+            margin: 0;
+        }
+        .class input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        .buttons-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button.back {
+            background-color: #dc3545;
+        }
+        .button.back:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        Available Classes
+    </div>
+
+    <div class="classes-container" id="classes-list">
+        <!-- Filtered classes will be dynamically added here -->
+    </div>
+
+    <div class="buttons-container">
+        <button class="button back" onclick="goBack()">Back to Course Registration</button>
+        <button class="button" onclick="registerClasses()">Register for Selected Classes</button>
+    </div>
+
+    <script>
+        // Sample classes data
+        const sampleClasses = [
+            { name: "Intro to Programming", professor: "Dr. Smith", credits: 3, time: "Day Class", location: "Online", startDate: "2024-01-15", endDate: "2024-05-15" },
+            { name: "Data Structures", professor: "Prof. Johnson", credits: 4, time: "Night Class", location: "In-Person", startDate: "2024-02-01", endDate: "2024-06-01" },
+            { name: "AI Fundamentals", professor: "Dr. Taylor", credits: 3, time: "Night Class", location: "Hybrid", startDate: "2024-03-01", endDate: "2024-07-01" },
+            { name: "Cybersecurity Basics", professor: "Prof. Adams", credits: 4, time: "Day Class", location: "Online", startDate: "2024-01-20", endDate: "2024-05-20" },
+            { name: "Web Development", professor: "Dr. Brown", credits: 3, time: "Night Class", location: "Online", startDate: "2024-03-10", endDate: "2024-06-10" },
+            // Add more classes here...
+        ];
+
+        // Extract filters from the query string
+        const queryParams = new URLSearchParams(window.location.search);
+
+        const filters = {
+            classTime: queryParams.get('classTime'), // day or night
+            startDate: queryParams.get('startDate'), // date
+            endDate: queryParams.get('endDate'), // date
+            professor: queryParams.get('professor') || '',
+            courseNumber: queryParams.get('courseNumber') || '',
+            subject: queryParams.get('subject') || '',
+            credits: queryParams.get('credits') || '',
+            location: queryParams.get('location'), // online, in-person, hybrid
+        };
+
+        // Filter classes based on user-selected criteria
+        const filteredClasses = sampleClasses.filter(course => {
+            const matchesTime = !filters.classTime || course.time.toLowerCase() === (filters.classTime === "day" ? "day class" : "night class");
+            const matchesLocation = !filters.location || course.location.toLowerCase() === filters.location.toLowerCase();
+            const matchesCredits = !filters.credits || course.credits === parseInt(filters.credits, 10);
+            const matchesProfessor = !filters.professor || course.professor.toLowerCase().includes(filters.professor.toLowerCase());
+            const matchesStartDate = !filters.startDate || new Date(course.startDate) >= new Date(filters.startDate);
+            const matchesEndDate = !filters.endDate || new Date(course.endDate) <= new Date(filters.endDate);
+            const matchesSubject = !filters.subject || course.name.toLowerCase().includes(filters.subject.toLowerCase());
+
+            return matchesTime && matchesLocation && matchesCredits && matchesProfessor && matchesStartDate && matchesEndDate && matchesSubject;
+        });
+
+        // Populate the filtered classes
+        const classesList = document.getElementById("classes-list");
+
+        if (filteredClasses.length > 0) {
+            filteredClasses.forEach(course => {
+                const courseDiv = document.createElement("div");
+                courseDiv.className = "class";
+                courseDiv.innerHTML = `
+                    <div>
+                        <h4>${course.name}</h4>
+                        <p><strong>Professor:</strong> ${course.professor}</p>
+                        <p><strong>Credits:</strong> ${course.credits}</p>
+                        <p><strong>Time:</strong> ${course.time}</p>
+                        <p><strong>Location:</strong> ${course.location}</p>
+                    </div>
+                    <input type="checkbox" name="selectedCourses" value="${course.name}">
+                `;
+                classesList.appendChild(courseDiv);
+            });
+        } else {
+            classesList.innerHTML = `<p>No classes match your criteria.</p>`;
+        }
+
+        // Register selected classes
+        function registerClasses() {
+            const selectedCourses = Array.from(document.querySelectorAll('input[name="selectedCourses"]:checked')).map(checkbox => checkbox.value);
+
+            if (selectedCourses.length > 0) {
+                const student = JSON.parse(localStorage.getItem('student')) || { courseList: [] };
+                student.courseList.push(...selectedCourses);
+                localStorage.setItem('student', JSON.stringify(student));
+                window.location.href = 'student_info.html';
+            } else {
+                alert("Please select at least one class to register.");
+            }
+        }
+
+        // Go back to the course registration page
+        function goBack() {
+            window.location.href = 'course_registration.html';
+        }
+    </script>
+
+</body>
+</html>
