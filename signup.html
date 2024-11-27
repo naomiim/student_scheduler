@@ -17,7 +17,7 @@
             background-color: #f4f4f9;
         }
         .logo {
-            width: 150px; /* Adjust the width as needed */
+            width: 150px;
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -65,52 +65,64 @@
 
     <div class="form-container">
         <h2>Sign Up</h2>
-        <form action="/signup/" method="post"></form>
+        <form action="/signup/" method="post" onsubmit="return validateForm()">
             <input type="text" id="full-name" placeholder="Full Name" required><br>
             <input type="email" id="email" placeholder="Email" required><br>
             <input type="text" id="username" placeholder="Username" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
-            <button onclick="signUp()">Create Account</button>
+            <button type="submit">Create Account</button>
         </form>
         <button class="back-to-login-btn" onclick="goBackToLogin()">Back to Login</button>
     </div>
 
     <script>
-        function signUp() {
+        // Validate the form input
+        function validateForm() {
             const fullName = document.getElementById('full-name').value;
             const email = document.getElementById('email').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Validate input
+            // Check if all fields are filled
             if (!fullName || !email || !username || !password) {
                 alert('All fields are required!');
-                return;
+                return false;
             }
 
-            // Create a new student object
+            // Validate password
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/; // At least 1 uppercase, 1 digit, and 8+ characters
+            if (!passwordRegex.test(password)) {
+                alert('Password must meet the following requirements:\n' +
+                      '- At least 8 characters\n' +
+                      '- At least 1 uppercase letter\n' +
+                      '- At least 1 number');
+                return false;
+            }
+
+            // If validation passes, save the user and redirect
             const student = {
                 fullName: fullName,
                 email: email,
                 username: username,
                 password: password,
-                studentID: `S${Math.floor(Math.random() * 90000) + 10000}`,  // Random ID
+                studentID: `S${Math.floor(Math.random() * 90000) + 10000}`, // Random ID
                 courseList: [],
                 numberOfCredits: 0,
                 gpa: 0.0
             };
 
-            // Save to localStorage
             localStorage.setItem('student', JSON.stringify(student));
-
-            // Redirect back to login page
-            window.location.href = 'login.html';  // Redirect to login page after account is created
+            alert('Account created successfully!');
+            window.location.href = 'login.html'; // Redirect to login page after account creation
+            return true;
         }
 
+        // Redirect back to the login page
         function goBackToLogin() {
-            window.location.href = 'login.html';  // Redirect back to login page
+            window.location.href = 'login.html';
         }
     </script>
 
 </body>
 </html>
+
