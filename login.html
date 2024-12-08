@@ -65,29 +65,38 @@
 
     <div class="form-container">
         <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username" required><br>
-        <input type="password" id="password" placeholder="Password" required><br>
-        <button onclick="login()">Login</button>
-        <button class="create-account-btn" onclick="goToSignup()">Create Account</button>
+        <form onsubmit="return login(event)">
+            <input type="text" id="username" placeholder="Username" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button onclick="login()">Login</button>
+        </form>
+        <form action="signup.html">
+            <button type="submit" class="create-account-btn">Create Account</button>
+        </form>
     </div>
 
     <script>
-        function login() {
+         function login(event) {
+            event.preventDefault(); // Prevent form submission
+
             const enteredUsername = document.getElementById('username').value;
             const enteredPassword = document.getElementById('password').value;
 
-            // Get the stored student data from localStorage
-            const student = JSON.parse(localStorage.getItem('student'));
+            // Get the array of users from localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
 
-            if (student && enteredUsername === student.username && enteredPassword === student.password) {
-                window.location.href = 'student_info.html'; // Redirect to student info page
+            // Check if the entered credentials match any user
+            const user = users.find(user => user.username === enteredUsername && user.password === enteredPassword);
+
+            if (user) {
+                // Store the logged-in user in localStorage (for session tracking)
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+                // Redirect to the student info page
+                window.location.href = 'homepage.html';
             } else {
                 alert('Invalid login credentials!');
             }
-        }
-
-        function goToSignup() {
-            window.location.href = 'signup.html';  // Redirect to signup page
         }
     </script>
 

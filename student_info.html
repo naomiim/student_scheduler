@@ -133,30 +133,39 @@
     </div>
 
     <script>
-        // Retrieve the student object from localStorage
-        const student = JSON.parse(localStorage.getItem('student'));
+        // Retrieve the logged-in user object from localStorage
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-        // Populate the page with student information
-        if (student) {
-            document.getElementById('student-name').textContent = `Name: ${student.fullName}`;
-            document.getElementById('student-id').textContent = `Student ID: ${student.studentID}`;
-            document.getElementById('student-email').textContent = `Email: ${student.email}`;
-            document.getElementById('credits').textContent = `Credits: ${student.numberOfCredits}`;
-            document.getElementById('gpa').textContent = `GPA: ${student.gpa}`;
+        // Populate the page with user information
+        if (loggedInUser) {
+            document.getElementById('student-name').textContent = `Name: ${loggedInUser.fullName}`;
+            document.getElementById('student-id').textContent = `Student ID: ${loggedInUser.studentID || 'N/A'}`;
+            document.getElementById('student-email').textContent = `Email: ${loggedInUser.email}`;
+            document.getElementById('credits').textContent = `Credits: ${loggedInUser.numberOfCredits || 0}`;
+            document.getElementById('gpa').textContent = `GPA: ${loggedInUser.gpa || 0.0}`;
 
             // Populate the course list
             const courseListElement = document.getElementById('course-list');
-            if (student.courseList.length > 0) {
-                student.courseList.forEach(course => {
+
+            if (loggedInUser.courseList && loggedInUser.courseList.length > 0) {
+                // Ensure the course list has unique entries
+                const uniqueCourses = [...new Set(loggedInUser.courseList)];
+
+                // Populate the course list
+                uniqueCourses.forEach(course => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = course;  // Assuming course names are strings for now
+                    listItem.textContent = course;
                     courseListElement.appendChild(listItem);
                 });
             } else {
+                // If no courses are registered, display a placeholder message
                 const listItem = document.createElement('li');
                 listItem.textContent = 'No courses registered yet';
                 courseListElement.appendChild(listItem);
             }
+        } else {
+            alert('No user is currently logged in.');
+            window.location.href = 'login.html'; // Redirect to login page
         }
 
         function logout() {

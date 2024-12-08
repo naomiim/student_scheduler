@@ -65,23 +65,30 @@
 
     <div class="form-container">
         <h2>Sign Up</h2>
-        <form action="/signup/" method="post" onsubmit="return validateForm()">
+        <form action="login.html" method="post" onsubmit="return validateForm()">
             <input type="text" id="full-name" placeholder="Full Name" required><br>
             <input type="email" id="email" placeholder="Email" required><br>
             <input type="text" id="username" placeholder="Username" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="submit">Create Account</button>
         </form>
-        <button class="back-to-login-btn" onclick="goBackToLogin()">Back to Login</button>
+        <form action="login.html">
+            <button type="submit" class="back-to-login-btn">Create Account</button>
+        </form>
     </div>
 
     <script>
+        // Function to generate a unique Student ID
+        function generateStudentID() {
+            return `S${Math.floor(Math.random() * 90000) + 10000}`; // Generates an ID like "S12345"
+        }
+
         // Validate the form input
         function validateForm() {
-            const fullName = document.getElementById('full-name').value;
-            const email = document.getElementById('email').value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('full-name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
 
             // Check if all fields are filled
             if (!fullName || !email || !username || !password) {
@@ -99,30 +106,39 @@
                 return false;
             }
 
-            // If validation passes, save the user and redirect
-            const student = {
-                fullName: fullName,
-                email: email,
-                username: username,
-                password: password,
-                studentID: `S${Math.floor(Math.random() * 90000) + 10000}`, // Random ID
-                courseList: [],
+            // Retrieve the list of users or initialize an empty array
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Check if the username already exists
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists. Please choose another one.');
+                return false;
+            }
+
+            // Generate a unique Student ID
+            const studentID = generateStudentID();
+
+            // Create a new user object
+            const newUser = {
+                fullName,
+                email,
+                username,
+                password,
+                studentID, // Add the generated student ID
+                courseList: [], // Initialize an empty course list
                 numberOfCredits: 0,
                 gpa: 0.0
             };
 
-            localStorage.setItem('student', JSON.stringify(student));
-            alert('Account created successfully!');
-            window.location.href = 'login.html'; // Redirect to login page after account creation
-            return true;
-        }
+            // Add the new user to the list and save back to localStorage
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
 
-        // Redirect back to the login page
-        function goBackToLogin() {
-            window.location.href = 'login.html';
+            alert(`Account created successfully!\nYour Student ID is: ${studentID}`);
+            window.location.href = 'login.html'; // Redirect to login page
+            return false;
         }
     </script>
 
 </body>
 </html>
-

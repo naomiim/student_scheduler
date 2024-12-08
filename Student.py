@@ -19,8 +19,8 @@ class Student:
 
     # Adds course to course list after signing up
     def addCourse(self, course: Course):
-        self.class_list.append(course)
-        self.number_of_credits += course.credits
+        self.course_list.append(course)
+        self.number_of_credits += course.num_of_credits
 
     # allows for updating of gpa outside of object
     def updateGPA(self, new_gpa):
@@ -28,7 +28,7 @@ class Student:
     
     # formatting for print statements
     def __str__(self):
-        courses = ", ".join([course.course_name for course in self.class_list])
+        courses = ", ".join([f"{course.subject} {course.course_number}" for course in self.course_list])
         return (f"Student ID: {self.student_id}\n"
                 f"Name: {self.full_name}\n"
                 f"Email: {self.email}\n"

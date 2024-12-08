@@ -1,9 +1,9 @@
-# signup_app/views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import csv
 import os
+import json
 
 # Path to the CSV file
 STUDENTS_FILE = os.path.join(os.path.dirname(__file__), 'students.csv')
@@ -38,3 +38,26 @@ def signup(request):
         return redirect('/login/')  # Redirect to login page after signup
 
     return JsonResponse({'message': 'Invalid request'}, status=405)
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+
+        # Check if the CSV file exists
+        if not os.path.exists(STUDENTS_FILE):
+            return JsonResponse({'success': False, 'message': 'No users found'})
+
+        # Read from the CSV file to find matching username and password
+        with open(STUDENTS_FILE, mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['username'] == username and row['password'] == password:
+                    return JsonResponse({'success': True, 'message': 'Login successful'})
+
+        # If no match is found
+        return JsonResponse({'success': False, 'message': 'Invalid credentials'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
